@@ -84,6 +84,15 @@ Start in the ce-sandpit account. When you start using git to work with you CodeC
     # Clean up installation files
     rm -rf /tmp/awscliv2.zip /tmp/aws
     sleep 5  # Wait for 5 seconds after cleanup
+ # Create destination directory
+    sudo mkdir -p /opt/modelizeIT
+    sudo mkdir -p /tmp/modelizeit
+    sudo chmod -R 777 /tmp/modelizeit
 
+    # Download the file from S3 using aws cli
+    aws s3 cp s3://sas-sandbox-staging/ModelizeIT/ /tmp/modelizeit --recursive
+
+    # Extract the file
+    sudo tar -xvzf /tmp/modelizeit/apache-maven-3.9.9-bin.tar.gz -C /opt/modelizeIT
 
  
