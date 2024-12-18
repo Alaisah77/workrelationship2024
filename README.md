@@ -66,50 +66,24 @@ Start in the ce-sandpit account. When you start using git to work with you CodeC
 
  
 
-set AWS_PROFILE=ce-sandpit 
-
-updated my userdata resource "aws_instance" "rhel_instance" {
-  ami           = "ami-xxxxxxxx"  # Replace with your RHEL AMI ID
-  instance_type = "t2.micro"      # Choose the instance type as needed
-  # ... other configurations ...
-
-  user_data = <<-EOF
     #!/bin/bash
-    # Disable the subscription-manager plugin
-    if [ -f /etc/yum/pluginconf.d/subscription-manager.conf ]; then
-      sudo sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/subscription-manager.conf
-    elif [ -f /etc/dnf/plugins/subscription-manager.conf ]; then
-      sudo sed -i 's/enabled=1/enabled=0/' /etc/dnf/plugins/subscription-manager.conf
-    fi
+    #switch to rootuser
+    sudo -i
     # Update and install dependencies
     sudo yum update -y
-    sudo yum install -y aws-cli tar
-    # ... additional setup commands ...
-  EOF
-
-  # ... other configurations ...
-}
-resource "aws_instance" "rhel_instance" {
-  ami           = "ami-xxxxxxxx"  # Replace with your RHEL AMI ID
-  instance_type = "t2.micro"      # Choose the instance type as needed
-  # ... other configurations ...
-
-  user_data = <<-EOF
-    #!/bin/bash
-    # Disable the subscription-manager plugin
-    if [ -f /etc/yum/pluginconf.d/subscription-manager.conf ]; then
-      sudo sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/subscription-manager.conf
-    elif [ -f /etc/dnf/plugins/subscription-manager.conf ]; then
-      sudo sed -i 's/enabled=1/enabled=0/' /etc/dnf/plugins/subscription-manager.conf
-    fi
-    # Update and install dependencies
-    sudo yum update -y
-    sudo yum install -y aws-cli tar
-    # ... additional setup commands ...
-  EOF
-
-  # ... other configurations ...
-}
+    sleep 10
+    sudo yum install -y unzip
+    sleep 5
+    # Download AWS CLI v2
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+    sleep 5
+    unzip /tmp/awscliv2.zip -d /tmp
+    sleep 5 
+    sudo /tmp/aws/install
+    sleep 5
+    # Clean up installation files
+    rm -rf /tmp/awscliv2.zip /tmp/aws
+    sleep 5  # Wait for 5 seconds after cleanup
 
 
  
