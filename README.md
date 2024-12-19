@@ -95,4 +95,45 @@ Start in the ce-sandpit account. When you start using git to work with you CodeC
     # Extract the file
     sudo tar -xvzf /tmp/modelizeit/apache-maven-3.9.9-bin.tar.gz -C /opt/modelizeIT
 
+    # Verrifiy this code
+
+    user_data = <<-EOF
+              #!/bin/bash
+
+              DEST_DIR="/opt/modelizeIT"
+      
+              sudo yum update -y
+              sleep 5
+              sudo yum install -y unzip
+              sleep 5
+             
+              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+              sleep 5
+              unzip /tmp/awscliv2.zip -d /tmp
+              sleep 5 
+              sudo /tmp/aws/install
+              
+             
+              sudo rm -rf /tmp/awscliv2.zip /tmp/aws
+              sleep 10 
+
+              sudo chmod -R 777 /tmp/modelizeit
+              sleep 10
+
+              aws s3 cp s3://saas-sandbox-staging/ModelizeIT/modelizeIT-AnalysisServer.tgz /tmp/modelizeit/
+              sleep 10
+              sudo tar -xvzf /tmp/modelizeit/modelizeIT-AnalysisServer.tgz -C /opt/
+              sleep 10
+
+    
+              cd $DEST_DIR/bin
+              chmod +x RejuvenApptor-start.sh modelizeIT-start.sh Gatherer-UI.sh Gatherer-JobRunner.sh
+              sh RejuvenApptor-start.sh
+              sh modelizeIT-start.sh
+              sh Gatherer-JobRunner.sh
+              sh Gatherer-UI.sh
+             
+              rm -f /tmp/modelizeIT-AnalysisServer.tgz
+              EOF
+
  
