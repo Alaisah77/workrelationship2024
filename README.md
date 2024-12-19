@@ -266,4 +266,95 @@ git clone codecommit::eu-west-2://ce-sandbox-admin@saas-sandbox-terraform-two
    53  history
 
 
+
+   Ansible
+
+   sudo apt update && sudo apt install -y ansible
+[modelizeIT]
+target_server ansible_host=192.168.1.10 ansible_user=ec2-user ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+---
+- name: Deploy ModelizeIT Application
+  hosts: modelizeIT
+  become: yes
+  tasks:
+
+    - name: Update system packages
+      yum:
+        name: "*"
+        state: latest
+
+    - name: Install unzip utility
+      yum:
+        name: unzip
+        state: present
+
+    - name: Download AWS CLI v2
+      get_url:
+        url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
+        dest: "/tmp/awscliv2.zip"
+
+    - name: Extract AWS CLI installer
+      unarchive:
+        src: /tmp/awscliv2.zip
+        dest: /tmp/
+        remote_src: yes
+
+    - name: Install AWS CLI
+      command: "/tmp/aws/install"
+
+    - name: Clean up AWS CLI installation files
+      file:
+        path: "/tmp/awscliv2.zip"
+        state: absent
+
+    - name: Set permissions for the working directory
+      file:
+        path: /tmp/modelizeit
+        state: directory
+        mode: "0777"
+
+    - name: Copy application package from S3
+      aws_s3:
+        bucket: saas-sandbox-staging
+        object: ModelizeIT/modelizeIT-AnalysisServer.tgz
+        dest: /tmp/modelizeit/modelizeIT-AnalysisServer.tgz
+        mode: get
+
+    - name: Extract the application package
+      unarchive:
+        src: /tmp/modelizeit/modelizeIT-AnalysisServer.tgz
+        dest: /opt/
+        remote_src: yes
+
+    - name: Make startup scripts executable
+      file:
+        path: "{{ item }}"
+        mode: "0755"
+      loop:
+        - /opt/modelizeIT/bin/RejuvenApptor-start.sh
+        - /opt/modelizeIT/bin/modelizeIT-start.sh
+        - /opt/modelizeIT/bin/Gatherer-UI.sh
+        - /opt/modelizeIT/bin/Gatherer-JobRunner.sh
+
+    - name: Execute startup scripts
+      command: "sh {{ item }}"
+      loop:
+        - /opt/modelizeIT/bin/RejuvenApptor-start.sh
+        - /opt/modelizeIT/bin/modelizeIT-start.sh
+        - /opt/modelizeIT/bin/Gatherer-UI.sh
+        - /opt/modelizeIT/bin/Gatherer-JobRunner.sh
+
+    - name: Remove the application package
+      file:
+        path: /tmp/modelizeit/modelizeIT-AnalysisServer.tgz
+        state: absent
+
+      Run i
+
+ansible-playbook -i inventory deploy_modelizeIT.yml
+
+
+
+
  
