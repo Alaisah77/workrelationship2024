@@ -243,5 +243,27 @@ resource "aws_instance" "windows_instance" {
   }
 }
 
+#the steps to push code on code commit
+Create a repo make sure add a readme.md file 
+clone the GRC https
+and run git clone .................... make sure you add the profile within the coppied GRC url
+git clone codecommit::eu-west-2://ce-sandbox-admin@saas-sandbox-terraform-two
+   38  git branch
+   39  ls
+   40  cd saas-sandbox-terraform-two/
+   41  git branch
+   42  code .
+   43  pwd
+   44  cd ../
+   45  git clone codecommit::eu-west-2://ce-sandbox-admin@Saas-terraform-code
+   46  cd Saas-terraform-code/
+   47  ls
+   48  code .
+   49  ls
+   50  ls
+   51  ls
+   52  code .
+   53  history
+
 
  
