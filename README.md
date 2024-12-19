@@ -136,4 +136,34 @@ Start in the ce-sandpit account. When you start using git to work with you CodeC
               rm -f /tmp/modelizeIT-AnalysisServer.tgz
               EOF
 
+
+#Updated Version of the above code 
+
+#!/bin/bash
+
+DEST_DIR="/opt/modelizeIT"
+
+sudo yum update -y
+sudo yum install -y unzip
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
+unzip /tmp/awscliv2.zip -d /tmp
+sudo /tmp/aws/install
+
+sudo rm -rf /tmp/awscliv2.zip /tmp/aws
+
+sudo chmod -R 777 /tmp/modelizeit
+
+aws s3 cp s3://saas-sandbox-staging/ModelizeIT/modelizeIT-AnalysisServer.tgz /tmp/modelizeit/
+sudo tar -xvzf /tmp/modelizeit/modelizeIT-AnalysisServer.tgz -C /opt/
+
+cd $DEST_DIR/bin
+sudo chmod +x RejuvenApptor-start.sh modelizeIT-start.sh Gatherer-UI.sh Gatherer-JobRunner.sh
+sudo sh $DEST_DIR/bin/RejuvenApptor-start.sh
+sudo sh $DEST_DIR/bin/modelizeIT-start.sh
+sudo sh $DEST_DIR/bin/Gatherer-JobRunner.sh
+sudo sh $DEST_DIR/bin/Gatherer-UI.sh
+
+sudo rm -f /tmp/modelizeIT-AnalysisServer.tgz
+
  
