@@ -166,4 +166,82 @@ sudo sh $DEST_DIR/bin/Gatherer-UI.sh
 
 sudo rm -f /tmp/modelizeIT-AnalysisServer.tgz
 
+#This is for the powershell installation of modelizeit 
+
+
+resource "aws_instance" "windows_instance" {
+  ami                         = "ami-0c55b159cbfafe1f0"  # Replace with the desired Windows Server AMI ID
+  instance_type               = var.instance_type
+  subnet_id                   = var.subnet_id
+  key_name                    = var.key_pair_name
+  vpc_security_group_ids      = [var.security_group_id]
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+    <powershell>
+    # Set execution policy to allow script running
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force
+
+    # Define the destination directory
+    $DEST_DIR = "C:\\modelizeIT"
+
+    # Create the directory if it doesn't exist
+    if (-Not (Test-Path -Path $DEST_DIR)) {
+        New-Item -Path $DEST_DIR -ItemType Directory
+    }
+
+    # Install Chocolatey package manager
+    Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+    # Install 7-Zip using Chocolatey
+    choco install 7zip -y
+
+    # Download and install AWS CLI
+    $InstallerPath = "$env:TEMP\\AWSCLIV2.msi"
+    Invoke-WebRequest -Uri "https://awscli.amazonaws.com/AWSCLIV2.msi" -OutFile $InstallerPath
+    Start-Process msiexec.exe -ArgumentList "/i $InstallerPath /quiet" -Wait
+    Remove-Item -Path $InstallerPath
+
+    # Configure AWS CLI (ensure that AWS credentials are available)
+    # aws configure set aws_access_key_id YOUR_ACCESS_KEY_ID
+    # aws configure set aws_secret_access_key YOUR_SECRET_ACCESS_KEY
+    # aws configure set default.region YOUR_REGION
+
+    # Download the application package from S3
+    $TempFilePath = "$env:TEMP\\modelizeIT-AnalysisServer.zip"
+    aws s3 cp "s3://saas-sandbox-staging/ModelizeIT/modelizeIT-AnalysisServer.zip" $TempFilePath
+
+    # Extract the application package
+    & "C:\\Program Files\\7-Zip\\7z.exe" x $TempFilePath -o$DEST_DIR
+
+    # Remove the temporary file
+    Remove-Item -Path $TempFilePath
+
+    # Navigate to the application's bin directory
+    Set-Location -Path "$DEST_DIR\\bin"
+
+    # Execute the startup scripts
+    .\\RejuvenApptor-start.ps1
+    .\\modelizeIT-start.ps1
+    .\\Gatherer-JobRunner.ps1
+    .\\Gatherer-UI.ps1
+
+    # Enable RDP access
+    Set-ItemProperty -Path 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server' -Name 'fDenyTSConnections' -Value 0
+
+    # Allow RDP through Windows Firewall
+    Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+
+    # Set the Administrator password (ensure to replace 'YourSecurePassword' with a strong password)
+    $password = ConvertTo-SecureString "YourSecurePassword" -AsPlainText -Force
+    Set-LocalUser -Name "Administrator" -Password $password
+    </powershell>
+  EOF
+
+  tags = {
+    Name = "WindowsModelizeITInstance"
+  }
+}
+
+
  
