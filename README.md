@@ -441,4 +441,43 @@ updated with the host there
         state: absent
 
 
+############Manual Powershell command to gather some information on windows servers##############
+# Define output file
+$outputFile = "C:\ServerInfo.txt"
+
+# Collect Disk Usage Information
+"Disk Usage Information:" | Out-File -FilePath $outputFile
+Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name="Used(GB)";Expression={[math]::round(($_.Used/1GB),2)}}, @{Name="Free(GB)";Expression={[math]::round(($_.Free/1GB),2)}}, @{Name="Total(GB)";Expression={[math]::round(($_.Used/1GB) + ($_.Free/1GB),2)}} | Format-Table | Out-File -FilePath $outputFile -Append
+
+# Collect System Information
+"`nSystem Information:" | Out-File -FilePath $outputFile -Append
+Get-CimInstance -ClassName Win32_OperatingSystem | Select-Object Caption, Version, BuildNumber, OSArchitecture | Format-List | Out-File -FilePath $outputFile -Append
+
+# Collect Domain Information
+"`nDomain Information:" | Out-File -FilePath $outputFile -Append
+(Get-WmiObject Win32_ComputerSystem).Domain | Out-File -FilePath $outputFile -Append
+
+# Collect Swap Space Information
+"`nSwap Space Information:" | Out-File -FilePath $outputFile -Append
+Get-CimInstance -ClassName Win32_PageFileUsage | Select-Object Name, AllocatedBaseSize, CurrentUsage, PeakUsage | Format-Table | Out-File -FilePath $outputFile -Append
+
+# Collect Installed Packages Information
+"`nInstalled Packages Information:" | Out-File -FilePath $outputFile -Append
+Get-WmiObject -Class Win32_Product | Select-Object Name, Version, Vendor | Format-Table | Out-File -FilePath $outputFile -Append
+
+# Collect Network Configuration
+"`nNetwork Configuration:" | Out-File -FilePath $outputFile -Append
+Get-NetIPConfiguration | Format-List | Out-File -FilePath $outputFile -Append
+
+# Collect Hardware Configuration
+"`nHardware Configuration:" | Out-File -FilePath $outputFile -Append
+Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object Manufacturer, Model, TotalPhysicalMemory | Format-List | Out-File -FilePath $outputFile -Append
+
+# Collect Processor Information
+"`nProcessor Information:" | Out-File -FilePath $outputFile -Append
+Get-CimInstance
+::contentReference[oaicite:0]{index=0}
+ 
+
+
  
