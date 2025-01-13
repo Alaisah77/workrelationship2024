@@ -440,7 +440,7 @@ updated with the host there
         path: /tmp/modelizeit/modelizeIT-AnalysisServer.tgz
         state: absent
 
-
+##################################################################################################################################################################################################################################################################################
 ############Manual Powershell command to gather some information on windows servers##############
 # Define output file
 $outputFile = "C:\ServerInfo.txt"
@@ -477,6 +477,66 @@ Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object Manufacturer, Mo
 "`nProcessor Information:" | Out-File -FilePath $outputFile -Append
 Get-CimInstance
 ::contentReference[oaicite:0]{index=0}
+
+
+##########################################################################################################################################################################################################
+# This is to gather information using CMD commands on windows severs 
+Instructions:
+
+Create the Script File:
+
+Open Notepad or any text editor.
+Copy and paste the above script into the editor.
+Save the file with a .bat extension, for example, CollectServerInfo.bat.
+Run the Script:
+
+Right-click on the saved .bat file and select "Run as administrator" to ensure it has the necessary permissions.
+The script will execute each command and append the output to C:\ServerInfo.txt.
+Review the Output:
+
+Navigate to C:\ServerInfo.txt to review the collected system information.
+Note: Ensure you have the necessary administrative privileges to execute these commands and access the required system information.
+
+By utilizing these commands and the batch script, you can effectively gather comprehensive system information on your Windows server, aiding in the migration process.
+
+@echo off
+set outputFile=C:\ServerInfo.txt
+
+echo Disk Usage Information: > %outputFile%
+wmic logicaldisk get name,filesystem,freespace,size >> %outputFile%
+
+echo. >> %outputFile%
+echo System Information: >> %outputFile%
+systeminfo >> %outputFile%
+
+echo. >> %outputFile%
+echo Domain Information: >> %outputFile%
+echo %USERDOMAIN% >> %outputFile%
+
+echo. >> %outputFile%
+echo Swap Space Information: >> %outputFile%
+wmic pagefile list /format:list >> %outputFile%
+
+echo. >> %outputFile%
+echo Installed Packages Information: >> %outputFile%
+wmic product get name,version,vendor >> %outputFile%
+
+echo. >> %outputFile%
+echo Network Configuration: >> %outputFile%
+ipconfig /all >> %outputFile%
+
+echo. >> %outputFile%
+echo Hardware Configuration: >> %outputFile%
+wmic computersystem get manufacturer,model,totalphysicalmemory >> %outputFile%
+
+echo. >> %outputFile%
+echo Processor Information: >> %outputFile%
+wmic cpu get name,numberofcores,numberoflogicalprocessors >> %outputFile%
+
+echo. >> %outputFile%
+echo Information collection complete. Output saved to %outputFile%
+
+
  
 
 
