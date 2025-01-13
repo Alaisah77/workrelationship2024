@@ -537,6 +537,73 @@ echo. >> %outputFile%
 echo Information collection complete. Output saved to %outputFile%
 
 
+######################################################################################################################################################################
+@echo off
+setlocal
+
+rem Define the output directory and file
+set "outputDir=C:\Downloads\ServerInfo"
+set "outputFile=%outputDir%\serverinfo.txt"
+
+rem Create the output directory if it doesn't exist
+if not exist "%outputDir%" (
+    mkdir "%outputDir%"
+)
+
+rem Redirect all output to the specified file
+> "%outputFile%" (
+    echo Disk Usage Information:
+    wmic logicaldisk get name,filesystem,freespace,size
+
+    echo.
+    echo System Information:
+    systeminfo
+
+    echo.
+    echo Domain Information:
+    echo %USERDOMAIN%
+
+    echo.
+    echo Swap Space Information:
+    wmic pagefile list /format:list
+
+    echo.
+    echo Installed Packages Information:
+    wmic product get name,version,vendor
+
+    echo.
+    echo Network Configuration:
+    ipconfig /all
+
+    echo.
+    echo Hardware Configuration:
+    wmic computersystem get manufacturer,model,totalphysicalmemory
+
+    echo.
+    echo Processor Information:
+    wmic cpu get name,numberofcores,numberoflogicalprocessors
+
+    echo.
+    echo Information collection complete. Output saved to %outputFile%
+)
+
+endlocal
+
+#############################################################################################################
+
+Save the file with a .bat extension, for example, CollectServerInfo.bat.
+
+Run the Script:
+
+Right-click on the saved .bat file and select "Run as administrator" to ensure it has the necessary permissions.
+
+The script will execute each command and save the output to C:\Downloads\ServerInfo\serverinfo.txt.
+
+Review the Output:
+
+Navigate to C:\Downloads\ServerInfo\.
+
+Open serverinfo.txt with a text editor to review the collected system information.
  
 
 
