@@ -755,6 +755,81 @@ rem Redirect all output to the specified file
 ) > "%outputFile%"
 
 endlocal
+###################################################################################################################
 
+@echo off
+setlocal
+
+rem Define the output directory and file
+set "outputDir=C:\Gatherwindows_info"
+set "outputFile=%outputDir%\Captured_ServerInfo.log"
+
+rem Create the output directory if it doesn't exist
+if not exist "%outputDir%" (
+    mkdir "%outputDir%"
+)
+
+rem Redirect all output to the specified file
+(
+    echo Disk Usage Information:
+    wmic logicaldisk get name,filesystem,freespace,size
+
+    echo.
+    echo System Information:
+    systeminfo
+
+    echo.
+    echo Domain Information:
+    echo %USERDOMAIN%
+
+    echo.
+    echo Installed Packages Information:
+    wmic product get name,version,vendor
+
+    echo.
+    echo Network Configuration:
+    ipconfig /all
+
+    echo.
+    echo Hardware Configuration:
+    wmic computersystem get manufacturer,model,totalphysicalmemory
+
+    echo.
+    echo Processor Information:
+    wmic cpu get name,numberofcores,numberoflogicalprocessors
+
+    
+    echo.
+    echo Installed Drivers:
+    driverquery
+
+    echo.
+    echo User Accounts:
+    net user
+
+    echo.
+    echo Operating System Information:
+    wmic os get Caption,Version,ServicePackMajorVersion,ServicePackMinorVersion
+
+    echo.
+    echo Open Network Ports:
+    netstat -an | find "LISTEN"
+
+    echo.
+    echo Firewall Configuration:
+    netsh advfirewall show allprofiles
+
+    echo.
+    echo Swap Space Information:
+    wmic pagefile list /format:list
+
+    echo.
+    echo Information collection complete. Output saved in %outputFile%
+) > "%outputFile%"
+
+endlocal
+
+
+ 
 
  
