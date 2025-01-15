@@ -604,6 +604,77 @@ Review the Output:
 Navigate to C:\Downloads\ServerInfo\.
 
 Open serverinfo.txt with a text editor to review the collected system information.
+###############################################################################################################################
+@echo off
+>C:\Gatherwindows_info\Captured_ServerInfo.log (
+
+echo Disk Usage Information: 
+wmic logicaldisk get name,filesystem,freespace,size 
+
+echo. 
+echo System Information: 
+systeminfo 
+
+echo. 
+echo Domain Information: 
+echo %USERDOMAIN% 
+
+echo. 
+echo Swap Space Information: 
+wmic pagefile list /format:list 
+
+echo. 
+echo Installed Packages Information: 
+wmic product get name,version,vendor 
+
+echo. 
+echo Network Configuration: 
+ipconfig /all 
+
+echo. 
+echo Hardware Configuration: 
+wmic computersystem get manufacturer,model,totalphysicalmemory 
+
+echo. 
+echo Processor Information: 
+wmic cpu get name,numberofcores,numberoflogicalprocessors 
+
+echo.
+echo Licensing Information:
+slmgr /dli
+
+echo.
+echo Installed Drivers:
+driverquery
+
+echo.
+echo User Accounts:
+net user
+
+echo.
+echo Operating System Information:
+wmic os get Caption,Version,ServicePackMajorVersion,ServicePackMinorVersion
+
+echo.
+echo Open Network Ports:
+netstat -an | find "LISTEN"
+
+echo.
+echo Installed Drivers:
+driverquery
+
+echo.
+echo Application Dependencies and Configurations:
+wmic product get name,versioin,vendor
+
+echo.
+echo Firewall Configuration:
+netsh advfirewall show all profiles
+
+echo.
+echo Information collection complete. Output saved in Captured_ServerInfo log
+
+)
  
 
 
