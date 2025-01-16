@@ -829,6 +829,61 @@ rem Redirect all output to the specified file
 
 endlocal
 
+######################################################################################################
+# Define the output directory and file
+$outputDir = "C:\Gatherwindows_info"
+$outputFile = "$outputDir\Captured_ServerInfo.log"
+
+# Create the output directory if it doesn't exist
+if (-not (Test-Path -Path $outputDir)) {
+    New-Item -Path $outputDir -ItemType Directory -Force
+}
+
+# Redirect all output to the specified file
+Start-Transcript -Path $outputFile -Append
+
+Write-Output "Disk Usage Information:"
+Get-PSDrive -PSProvider FileSystem | Select-Object Name, @{Name="FileSystem";Expression={(Get-Volume -DriveLetter $_.Name).FileSystem}}, @{Name="FreeSpace(GB)";Expression={[math]::round($_.Free/1GB,2)}}, @{Name="Size(GB)";Expression={[math]::round($_.Used/1GB + $_.Free/1GB,2)}}
+
+Write-Output "`nSystem Information:"
+Get-ComputerInfo | Select-Object CsName, WindowsVersion, WindowsBuildLabEx, OsArchitecture, CsProcessors, CsTotalPhysicalMemory
+
+Write-Output "`nDomain Information:"
+Write-Output "$env:USERDOMAIN"
+
+Write-Output "`nInstalled Packages Information:"
+Get-ItemProperty -Path 'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*' | Select-Object DisplayName, DisplayVersion, Publisher
+
+Write-Output "`nNetwork Configuration:"
+Get-NetIPConfiguration
+
+Write-Output "`nHardware Configuration:"
+Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object Manufacturer, Model, TotalPhysicalMemory
+
+Write-Output "`nProcessor Information:"
+Get-CimInstance -ClassName Win32_Processor | Select-Object Name, NumberOfCores, NumberOfLogicalProcessors
+
+Write-Output "`nInstalled Drivers:"
+Get-WmiObject Win32_PnPSignedDriver | Select-Object DeviceName, DriverVersion, Manufacturer
+
+Write-Output "`nUser Accounts:"
+Get-LocalUser | Select-Object Name, Enabled, LastLogon
+
+Write-Output "`nOperating System Information:"
+Get-ComputerInfo | Select-Object Caption, Version, ServicePackMajorVersion, ServicePackMinorVersion
+
+Write-Output "`nOpen Network Ports:"
+Get-NetTCPConnection -State Listen | Select-Object LocalAddress, LocalPort
+
+Write-Output "`nFirewall Configuration:"
+Get-NetFirewallProfile | Select-Object Name, Enabled, DefaultInboundAction, DefaultOutboundAction
+
+Write-Output "`nSwap Space Information:"
+Get-CimInstance -ClassName Win32_PageFileUsage | Select-Object Name, CurrentUsage, PeakUsage
+
+Write-Output "`nInformation collection complete. Output saved in $outputFile"
+
+Stop-Transcript
 
  
 
