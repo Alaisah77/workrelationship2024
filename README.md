@@ -1,3 +1,26 @@
+Dear Stuart,
+
+Thank you for your interest in our cleaning services. We're pleased to provide a quote for the cleaning of Saxon Care’s office space, approximately 2,000–3,000 sq ft in size with two toilets, to be cleaned twice per week.
+
+Based on our minimum hourly rate of £17, and estimating a maximum of 3 hours per visit (subject to confirmation after a site assessment), we propose the following pricing:
+
+If XeniaPure Ltd provides the cleaning products, the cost will be £60 per visit, which includes labour and materials. This totals £120 per week or £480 per month.
+
+If Saxon Care provides the cleaning products, the cost will be £51 per visit, totalling £102 per week or £408 per month.
+
+These estimates are based on a maximum of 3 hours per visit. If, after a site assessment, it is determined that less time is required, the cost will be adjusted accordingly.
+
+We would be happy to arrange a site visit to confirm the required cleaning time and any specific needs your team may have. XeniaPure Ltd is fully insured, our staff are DBS-checked, and we are committed to delivering a professional, reliable, and high-quality service.
+
+Please feel free to get in touch to schedule a visit or ask any questions.
+
+Warm regards,
+[Your Name]
+
+
+
+
+
 # workrelationship2024
 
 
