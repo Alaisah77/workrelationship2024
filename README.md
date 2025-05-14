@@ -1,3 +1,31 @@
+
+XeniaPure Ltd is a trusted cleaning and hospitality staffing company based in Chippenham, Wiltshire, serving both residential and commercial clients within a 1–20 mile radius of SN14. Established with a commitment to quality, professionalism, and client satisfaction, XeniaPure has built a reputation for reliable service delivery tailored to meet diverse needs.
+
+Our core offerings include:
+
+Commercial & Residential Cleaning: We provide top-tier cleaning services for homes, offices, healthcare facilities, and construction sites. Whether it's routine upkeep or one-off deep cleans, our skilled team ensures every space is left spotless and refreshed.
+
+Deep Cleaning Services: Perfect for end-of-tenancy, post-construction, or periodic hygiene needs. We deliver meticulous cleaning using eco-friendly products, available with or without client-supplied materials.
+
+Hospitality Staffing Solutions: To support the growing demand in restaurants, hotels, and event venues, XeniaPure now offers hospitality personnel including:
+
+Kitchen Porters
+
+Waiters & Waitresses
+
+Front of House Staff
+
+Back of House Staff
+
+Our carefully vetted team brings professionalism, punctuality, and a friendly attitude to every role, ensuring seamless integration with your existing staff and service expectations.
+
+We pride ourselves on flexibility, competitive pricing, and a customer-first approach. Whether you’re a homeowner, facilities manager, or hospitality business, XeniaPure Ltd is here to make your space shine and your events run smoothly.
+
+
+
+
+
+
 Dear Stuart,
 
 Thank you for your interest in our cleaning services. We're pleased to provide a quote for the cleaning of Saxon Care’s office space, approximately 2,000–3,000 sq ft in size with two toilets, to be cleaned twice per week.
